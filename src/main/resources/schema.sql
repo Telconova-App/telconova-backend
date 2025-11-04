@@ -11,20 +11,6 @@ CREATE TABLE IF NOT EXISTS usuarios (
 -- Unique constraint on email
 ALTER TABLE usuarios ADD CONSTRAINT IF NOT EXISTS uk_usuarios_email UNIQUE (email_usuario);
 
--- Basic insert for verification
--- NOTE: The application uses BCrypt for passwords. This example inserts a clear-text
--- password for schema verification only. To test authentication, replace the
--- password value with a BCrypt hash (e.g. produced by BCryptPasswordEncoder).
--- Basic insert for verification (password stored as BCrypt hash so authentication works)
--- Generated with BCrypt (strength 10) for plaintext: 'secret'
-INSERT INTO usuarios (email_usuario, password_usuario, name_usuario, role_usuario) VALUES (
-	'test@example.com',
-	'$2a$10$76jDh/40RDpBWeB/YFwSW.V/RPSBnS8AB3A7R271dWHeZyWvKOSri',
-	'Test User',
-	'Administrator'
-);
-
-
 -- Schema for Technician entity (matches com.telconovaP7F22025.demo.model.Technician)
 -- Table: tecnicos
 CREATE TABLE IF NOT EXISTS tecnicos (
@@ -38,23 +24,6 @@ CREATE TABLE IF NOT EXISTS tecnicos (
 -- Unique constraint on name_tecnico
 ALTER TABLE tecnicos ADD CONSTRAINT IF NOT EXISTS uk_tecnicos_name UNIQUE (name_tecnico);
 
--- Basic insert for verification
--- Example: Insert a technician for schema verification only
-INSERT INTO tecnicos (name_tecnico, zone_tecnico, workload_tecnico, speciality_tecnico) VALUES (
-	'Juan Perez',
-	'Zona Oriente',
-	'2',
-	'Electricidad'
-);
-
--- Additional technician seed
-INSERT INTO tecnicos (name_tecnico, zone_tecnico, workload_tecnico, speciality_tecnico) VALUES (
-  'Maria Gomez',
-  'Zona Occidente',
-  '1',
-  'Plomería'
-);
-
 -- Schema for Orders entity (used by frontend dashboard)
 -- Table: ordenes
 CREATE TABLE IF NOT EXISTS ordenes (
@@ -66,13 +35,3 @@ CREATE TABLE IF NOT EXISTS ordenes (
   assigned_to VARCHAR(64),
   status VARCHAR(32) NOT NULL
 );
-
--- Seed sample orders (match frontend examples)
-MERGE INTO ordenes KEY(id) VALUES ('O-1001','zona norte','2025-09-22T10:12:00','Instalación eléctrica','Cambio de tablero principal en edificio residencial',NULL,'pending');
-MERGE INTO ordenes KEY(id) VALUES ('O-1002','zona sur','2025-09-22T11:00:00','Reparación de cañería','Fuga en planta baja, requiere atención urgente','1','assigned');
-MERGE INTO ordenes KEY(id) VALUES ('O-1003','zona centro','2025-09-22T09:30:00','Mantenimiento HVAC','Revisión trimestral sistema aire acondicionado',NULL,'pending');
-MERGE INTO ordenes KEY(id) VALUES ('O-1004','zona oeste','2025-09-22T14:15:00','Instalación de red','Cableado estructurado para oficinas','1','assigned');
-MERGE INTO ordenes KEY(id) VALUES ('O-1005','zona este','2025-09-22T08:45:00','Reparación eléctrica','Cortocircuito en panel de distribución',NULL,'pending');
-MERGE INTO ordenes KEY(id) VALUES ('O-1006','zona norte','2025-09-22T16:20:00','Instalación de plomería','Nueva línea de agua para expansión','2','assigned');
-MERGE INTO ordenes KEY(id) VALUES ('O-1007','zona sur','2025-09-22T13:10:00','Mantenimiento preventivo','Revisión general de instalaciones',NULL,'pending');
-MERGE INTO ordenes KEY(id) VALUES ('O-1008','zona centro','2025-09-22T12:30:00','Reparación de red','Problemas de conectividad en switches',NULL,'pending');
