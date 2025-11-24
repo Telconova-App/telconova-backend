@@ -87,15 +87,18 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Get frontend URL from environment variable, fallback to localhost for
-        // development
+        // Get frontend URL from environment variable
         String frontendUrl = System.getenv("FRONTEND_URL");
+
+        // Log the frontend URL for debugging
         if (frontendUrl != null && !frontendUrl.isEmpty()) {
+            System.out.println("CORS: Frontend URL from environment: " + frontendUrl);
             configuration.setAllowedOrigins(Arrays.asList(
                     frontendUrl,
                     "http://localhost:5173",
                     "http://localhost:8081"));
         } else {
+            System.out.println("CORS: No FRONTEND_URL environment variable found, using localhost only");
             configuration.setAllowedOrigins(Arrays.asList(
                     "http://localhost:5173",
                     "http://localhost:8081"));
@@ -105,6 +108,7 @@ public class SecurityConfig {
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token"));
         configuration.setExposedHeaders(Arrays.asList("X-Auth-Token", "Authorization"));
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L); // Cache preflight response for 1 hour
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
