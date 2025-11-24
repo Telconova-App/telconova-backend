@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> findByAssignedTo(String assignedTo);
+    List<Order> findByStatus(String status);
+    List<Order> findByZona(String zona);
+    List<Order> findByStatusAndZona(String status, String zona);
 }
+

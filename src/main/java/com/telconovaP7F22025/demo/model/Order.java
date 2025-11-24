@@ -26,8 +26,23 @@ public class Order {
     @Column(name = "descripcion", nullable = false, length = 2000)
     private String descripcion;
 
+    @Column(name = "nombre_cliente")
+    private String nombreCliente;
+
+    @Column(name = "direccion", length = 500)
+    private String direccion;
+
+    @Column(name = "prioridad")
+    private String prioridad; // alta | media | baja
+
     @Column(name = "assigned_to")
     private String assignedTo; // technician id or code
+
+    @Column(name = "asignado_en")
+    private LocalDateTime asignadoEn;
+
+    @Column(name = "asignado_por")
+    private String asignadoPor;
 
     @Column(name = "status", nullable = false)
     private String status; // pending | assigned | completed | cancelled
@@ -42,6 +57,7 @@ public class Order {
         this.descripcion = descripcion;
         this.assignedTo = assignedTo;
         this.status = status;
+        this.prioridad = "media"; // default
     }
 
     public String getId() { return id; }
@@ -59,8 +75,23 @@ public class Order {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
+    public String getNombreCliente() { return nombreCliente; }
+    public void setNombreCliente(String nombreCliente) { this.nombreCliente = nombreCliente; }
+
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
+
+    public String getPrioridad() { return prioridad; }
+    public void setPrioridad(String prioridad) { this.prioridad = prioridad; }
+
     public String getAssignedTo() { return assignedTo; }
     public void setAssignedTo(String assignedTo) { this.assignedTo = assignedTo; }
+
+    public LocalDateTime getAsignadoEn() { return asignadoEn; }
+    public void setAsignadoEn(LocalDateTime asignadoEn) { this.asignadoEn = asignadoEn; }
+
+    public String getAsignadoPor() { return asignadoPor; }
+    public void setAsignadoPor(String asignadoPor) { this.asignadoPor = asignadoPor; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

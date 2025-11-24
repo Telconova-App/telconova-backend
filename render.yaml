@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: telconova-backend
+    env: java
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/demo-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: JAVA_OPTS
+        value: -Xmx512m -Xms256m
+      - key: JWT_SECRET
+        generateValue: true
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        value: onboarding@resend.dev
+      - key: RESEND_FROM_NAME
+        value: Acme
+      - key: FRONTEND_URL
+        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+databases:
+  - name: telconova-db
+    databaseName: telconova
+    user: telconova
+    plan: free

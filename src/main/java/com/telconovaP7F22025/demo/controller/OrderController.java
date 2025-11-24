@@ -25,9 +25,30 @@ public class OrderController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Order>> getAll() {
-        List<Order> orders = orderRepository.findAll();
+    public ResponseEntity<List<Order>> getAll(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String zona
+    ) {
+        List<Order> orders;
+        
+        if (status != null && zona != null) {
+            orders = orderRepository.findByStatusAndZona(status, zona);
+        } else if (status != null) {
+            orders = orderRepository.findByStatus(status);
+        } else if (zona != null) {
+            orders = orderRepository.findByZona(zona);
+        } else {
+            orders = orderRepository.findAll();
+        }
+        
         return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Order> getById(@PathVariable String id) {
+        return orderRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/create")

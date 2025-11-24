@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS tecnicos (
 	name_tecnico VARCHAR(255) NOT NULL,
 	zone_tecnico VARCHAR(255) NOT NULL,
 	workload_tecnico VARCHAR(255) NOT NULL,
-	speciality_tecnico VARCHAR(255) NOT NULL
+	speciality_tecnico VARCHAR(255) NOT NULL,
+	email_tecnico VARCHAR(255)
 );
 
 -- Unique constraint on name_tecnico
@@ -32,6 +33,24 @@ CREATE TABLE IF NOT EXISTS ordenes (
   creado_en TIMESTAMP NOT NULL,
   servicio VARCHAR(255) NOT NULL,
   descripcion VARCHAR(2000) NOT NULL,
+  nombre_cliente VARCHAR(255),
+  direccion VARCHAR(500),
+  prioridad VARCHAR(20) DEFAULT 'media',
   assigned_to VARCHAR(64),
+  asignado_en TIMESTAMP,
+  asignado_por VARCHAR(255),
   status VARCHAR(32) NOT NULL
 );
+
+-- Schema for Reports entity
+-- Table: reportes
+CREATE TABLE IF NOT EXISTS reportes (
+  id_reporte VARCHAR(64) PRIMARY KEY,
+  nombre_reporte VARCHAR(255) NOT NULL,
+  filtros TEXT,
+  metricas TEXT,
+  resumen TEXT,
+  creado_en TIMESTAMP NOT NULL,
+  creado_por VARCHAR(255) NOT NULL
+);
+
