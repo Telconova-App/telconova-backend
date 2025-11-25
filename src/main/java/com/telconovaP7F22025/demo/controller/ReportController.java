@@ -17,6 +17,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/reports")
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "${FRONTEND_URL:http://localhost:5173}", "http://localhost:5173",
+        "http://localhost:8081" }, allowCredentials = "true")
 @Tag(name = "Report Controller", description = "Handles report generation and management")
 public class ReportController {
 

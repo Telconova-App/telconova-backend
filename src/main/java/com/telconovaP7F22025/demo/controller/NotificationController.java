@@ -14,6 +14,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "${FRONTEND_URL:http://localhost:5173}", "http://localhost:5173",
+        "http://localhost:8081" }, allowCredentials = "true")
 @Tag(name = "Notification Controller", description = "Handles notifications to technicians")
 public class NotificationController {
 
@@ -23,11 +25,11 @@ public class NotificationController {
     public ResponseEntity<Map<String, Object>> sendNotification(@Valid @RequestBody NotificationRequest request) {
         try {
             notificationService.sendNotification(request);
-            
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "Notificación enviada exitosamente");
-            
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();

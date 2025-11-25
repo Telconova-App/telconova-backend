@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/assignments")
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "${FRONTEND_URL:http://localhost:5173}", "http://localhost:5173",
+        "http://localhost:8081" }, allowCredentials = "true")
 @Tag(name = "Assignment Controller", description = "Handles work order assignments")
 public class AssignmentController {
 
@@ -34,11 +36,11 @@ public class AssignmentController {
             if (orderId == null) {
                 orderId = body.get("orderId"); // Fallback for English naming
             }
-            
+
             if (orderId == null) {
                 return ResponseEntity.badRequest().build();
             }
-            
+
             Order assignedOrder = assignmentService.assignAutomatically(orderId);
             return ResponseEntity.ok(assignedOrder);
         } catch (Exception e) {
