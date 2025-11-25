@@ -4,13 +4,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.telconovaP7F22025.demo.dto.tech.CreateRequest;
 import com.telconovaP7F22025.demo.model.Technician;
 import jakarta.validation.Valid;
-
 
 import com.telconovaP7F22025.demo.service.TechService;
 
@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/technicians")
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "${FRONTEND_URL:http://localhost:5173}", "http://localhost:5173",
+        "http://localhost:8081" }, allowCredentials = "true")
 @Tag(name = "Technician Controller", description = "Handles technician operations")
 public class TechController {
 
@@ -34,6 +36,7 @@ public class TechController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Technician with that name already exists");
         }
     }
+
     @GetMapping("/all")
     public ResponseEntity<java.util.List<Technician>> getAllTechnicians() {
         java.util.List<Technician> technicians = techService.getAllTechnicians();

@@ -14,6 +14,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orders")
+@CrossOrigin(origins = { "${FRONTEND_URL:http://localhost:5173}", "http://localhost:5173",
+        "http://localhost:8081" }, allowCredentials = "true")
 public class OrderController {
 
     private final OrderRepository orderRepository;
@@ -27,10 +29,9 @@ public class OrderController {
     @GetMapping("/all")
     public ResponseEntity<List<Order>> getAll(
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String zona
-    ) {
+            @RequestParam(required = false) String zona) {
         List<Order> orders;
-        
+
         if (status != null && zona != null) {
             orders = orderRepository.findByStatusAndZona(status, zona);
         } else if (status != null) {
@@ -40,7 +41,7 @@ public class OrderController {
         } else {
             orders = orderRepository.findAll();
         }
-        
+
         return ResponseEntity.ok(orders);
     }
 
@@ -67,8 +68,7 @@ public class OrderController {
                 servicio,
                 descripcion,
                 assignedTo,
-                status
-        );
+                status);
 
         Order saved = orderRepository.save(order);
         // If created already assigned, increment technician workload once
@@ -80,7 +80,8 @@ public class OrderController {
                     t.setWorkloadTecnico(Integer.toString(wl + 1));
                     technicianRepository.save(t);
                 });
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
         return ResponseEntity.ok(saved);
     }
@@ -92,11 +93,16 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
         Order existing = existingOpt.get();
-        if (updates.containsKey("zona")) existing.setZona(updates.get("zona"));
-        if (updates.containsKey("servicio")) existing.setServicio(updates.get("servicio"));
-        if (updates.containsKey("descripcion")) existing.setDescripcion(updates.get("descripcion"));
-        if (updates.containsKey("assignedTo")) existing.setAssignedTo(updates.get("assignedTo"));
-        if (updates.containsKey("status")) existing.setStatus(updates.get("status"));
+        if (updates.containsKey("zona"))
+            existing.setZona(updates.get("zona"));
+        if (updates.containsKey("servicio"))
+            existing.setServicio(updates.get("servicio"));
+        if (updates.containsKey("descripcion"))
+            existing.setDescripcion(updates.get("descripcion"));
+        if (updates.containsKey("assignedTo"))
+            existing.setAssignedTo(updates.get("assignedTo"));
+        if (updates.containsKey("status"))
+            existing.setStatus(updates.get("status"));
         Order saved = orderRepository.save(existing);
         return ResponseEntity.ok(saved);
     }
@@ -122,7 +128,8 @@ public class OrderController {
         Order existing = existingOpt.get();
 
         String currentAssigned = existing.getAssignedTo();
-        boolean isChange = (technicianId == null && currentAssigned != null) || (technicianId != null && !technicianId.equals(currentAssigned));
+        boolean isChange = (technicianId == null && currentAssigned != null)
+                || (technicianId != null && !technicianId.equals(currentAssigned));
 
         // If changing away from current technician, decrement previous workload
         if (isChange && currentAssigned != null) {
@@ -134,10 +141,12 @@ public class OrderController {
                     prev.setWorkloadTecnico(Integer.toString(wl));
                     technicianRepository.save(prev);
                 });
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
 
-        // Increment new technician workload only if changed to a new technician (not same)
+        // Increment new technician workload only if changed to a new technician (not
+        // same)
         if (isChange && technicianId != null) {
             try {
                 Long newId = Long.parseLong(technicianId);
@@ -147,7 +156,8 @@ public class OrderController {
                     next.setWorkloadTecnico(Integer.toString(wl));
                     technicianRepository.save(next);
                 });
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
 
         existing.setAssignedTo(technicianId);
